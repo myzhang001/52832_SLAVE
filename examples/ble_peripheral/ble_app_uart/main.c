@@ -79,6 +79,15 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+
+#include "Protocol_Analysis.h"
+
+
+
+
+
+
+
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
@@ -89,7 +98,7 @@
 #define APP_BLE_OBSERVER_PRIO           3                                           /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 
 #define APP_ADV_INTERVAL                64                                          /**< The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
-#define APP_ADV_TIMEOUT_IN_SECONDS      180                                         /**< The advertising timeout (in units of seconds). */
+#define APP_ADV_TIMEOUT_IN_SECONDS      0//180                                         /**< The advertising timeout (in units of seconds). */
 
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(20, UNIT_1_25_MS)             /**< Minimum acceptable connection interval (20 ms), Connection interval uses 1.25 ms units. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(75, UNIT_1_25_MS)             /**< Maximum acceptable connection interval (75 ms), Connection interval uses 1.25 ms units. */
@@ -175,7 +184,7 @@ static void gap_params_init(void)
  */
 /**@snippet [Handling the data received over BLE] */
 static void nus_data_handler(ble_nus_evt_t * p_evt)
-{
+{ 
 
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
     {
@@ -184,6 +193,8 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         NRF_LOG_DEBUG("Received data from BLE NUS. Writing data on UART.");
         NRF_LOG_HEXDUMP_DEBUG(p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
 
+        
+        #if 0
         for (uint32_t i = 0; i < p_evt->params.rx_data.length; i++)
         {
             do
@@ -200,6 +211,10 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         {
             while (app_uart_put('\n') == NRF_ERROR_BUSY);
         }
+        
+        #endif
+        
+        
     }
 
 }
@@ -700,8 +715,13 @@ int main(void)
 
     printf("\r\nUART Start!\r\n");
     NRF_LOG_INFO("UART Start!");
-    err_code = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
+    err_code = ble_advertising_start(&m_advertising,BLE_ADV_MODE_FAST);
     APP_ERROR_CHECK(err_code);
+
+    
+    Somputon_Init(&App_RecvHandler);
+
+
 
     // Enter main loop.
     for (;;)
