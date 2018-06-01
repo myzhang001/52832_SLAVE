@@ -54,7 +54,11 @@ void App_RecvHandler(uint16_t command, uint8_t* pdata,uint16_t len)
 					 break;		
 			
 			case BOND_COMMAND:
-					//bond_cmd(conn_handle,device_type,mac_addr);                              //发送绑定指令
+					bond_cmd();  //发送绑定指令
+                    
+            
+            
+            
 					 break;		
 												
 			case GET_HISTORY_DATA_TOTAL_PACKETS:

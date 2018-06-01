@@ -2,6 +2,8 @@
 ".\_build\main.o"
 ".\_build\protocol_analysis.o"
 ".\_build\somputon_ble_datahandle.o"
+".\_build\nus_maser_datahanle.o"
+".\_build\system_variable.o"
 ".\_build\boards.o"
 ".\_build\bsp.o"
 ".\_build\bsp_btn_ble.o"

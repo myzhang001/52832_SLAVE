@@ -76,3 +76,5 @@
 .\_build\main.o: ..\..\..\..\..\..\components\libraries\balloc\nrf_balloc.h
 .\_build\main.o: ..\..\..\..\..\..\components\libraries\experimental_log\nrf_log_default_backends.h
 .\_build\main.o: ..\arm5_no_packs\Protocol_Analysis.h
+.\_build\main.o: ..\arm5_no_packs\NUS_Master_DataHandle.h
+.\_build\main.o: ..\arm5_no_packs\System_Variable.h

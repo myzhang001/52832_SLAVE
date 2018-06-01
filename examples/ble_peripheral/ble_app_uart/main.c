@@ -81,10 +81,9 @@
 
 
 #include "Protocol_Analysis.h"
+#include "NUS_Master_DataHandle.h"
 
-
-
-
+#include "System_Variable.h"
 
 
 
@@ -92,7 +91,7 @@
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
 
-#define DEVICE_NAME                     "Nordic_UART"                               /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "zmy_UART"                               /**< Name of device. Will be included in the advertising data. */
 #define NUS_SERVICE_UUID_TYPE           BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
 
 #define APP_BLE_OBSERVER_PRIO           3                                           /**< Application's BLE observer priority. You shouldn't need to modify this value. */
@@ -124,6 +123,17 @@ static ble_uuid_t m_adv_uuids[]          =                                      
 {
     {BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE}
 };
+
+
+
+
+APP_TIMER_DEF(m_sys_timer_id);                           //系统定时
+
+#define SYS_MEAS_INTERVAL                     APP_TIMER_TICKS(1000)  
+
+uint8_t conn_flag = 0;       //连接标志
+
+
 
 
 /**@brief Function for assert macro callback.
@@ -186,6 +196,9 @@ static void gap_params_init(void)
 static void nus_data_handler(ble_nus_evt_t * p_evt)
 { 
 
+    uint8_t buffer[256];
+    
+    
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
     {
         uint32_t err_code;
@@ -193,7 +206,10 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         NRF_LOG_DEBUG("Received data from BLE NUS. Writing data on UART.");
         NRF_LOG_HEXDUMP_DEBUG(p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
 
+        memcpy(buffer,p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
         
+        nus_data_handle(buffer,p_evt->params.rx_data.length);
+         
         #if 0
         for (uint32_t i = 0; i < p_evt->params.rx_data.length; i++)
         {
@@ -350,12 +366,20 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     {
         case BLE_GAP_EVT_CONNECTED:
             NRF_LOG_INFO("Connected");
+        
+        
+            conn_flag  = true;         //连接标志
+        
+        
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
+            
+        
+            conn_flag = 0;
             NRF_LOG_INFO("Disconnected");
             // LED indication will be changed when advertising starts.
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
@@ -635,7 +659,7 @@ static void advertising_init(void)
 
     init.advdata.name_type          = BLE_ADVDATA_FULL_NAME;
     init.advdata.include_appearance = false;
-    init.advdata.flags              = BLE_GAP_ADV_FLAGS_LE_ONLY_LIMITED_DISC_MODE;
+    init.advdata.flags              = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
 
     init.srdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
     init.srdata.uuids_complete.p_uuids  = m_adv_uuids;
@@ -691,6 +715,124 @@ static void power_manage(void)
 }
 
 
+
+
+uint8_t work_step;
+
+uint8_t aSendBuffer[256];
+
+uint16_t length[5]={10};
+
+static void sys_meas_timeout_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+    //battery_level_update();
+    //printf("zmytest");
+    
+    static uint8_t cnt = 0;
+    
+    
+    switch(work_step)
+    {
+        case 0:
+           //步骤1 发起设备绑定指令
+       
+            if(conn_flag == 1)       //连接上
+            {
+               
+                {
+                    length[0] = 14;
+                    aSendBuffer[0] = START_FLAG;                                //数据头
+                    aSendBuffer[1] = 0x00;                                      //数据长度
+                    aSendBuffer[2] = 13;
+                    aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
+                    aSendBuffer[4] = 0x08;                                      //设备类型 
+                    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+                    
+                    
+                    aSendBuffer[11] =  (uint8_t)(BOND_COMMAND>>8);         //命令控制字
+                    aSendBuffer[12] =  (uint8_t)BOND_COMMAND;              //命令控制字
+                    
+                    aSendBuffer[13] = Crc8(&aSendBuffer[1],12);               //crc 校验
+                 
+                    ble_nus_string_send(&m_nus, aSendBuffer, &length[0]);        //发送数据
+                    
+                }
+
+            }
+            
+            work_step = 1;
+        
+            break;
+        case 1:
+           //上传用户运行状态
+        if(cnt++ > 4 )
+        {
+            {
+                    length[0] = 15;
+                    aSendBuffer[0] = START_FLAG;                                //数据头
+                    aSendBuffer[1] = 0x00;                                      //数据长度
+                    aSendBuffer[2] = 14;
+                    aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
+                    aSendBuffer[4] = 0x08;                                      //设备类型 
+                    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+                    
+                    
+                    aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND>>8);         //命令控制字
+                    aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND;              //命令控制字
+                    aSendBuffer[13] =  0x12;                                            //数据         
+                    aSendBuffer[14] = Crc8(&aSendBuffer[1],13);                      //crc 校验
+                 
+                    ble_nus_string_send(&m_nus, aSendBuffer, &length[0]);               //发送数据
+                    
+                }
+            
+            
+            work_step = 0;
+            cnt       = 0;
+        }
+        
+        
+        
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        
+  
+    }   
+}
+
+
+void timer_init(void)
+{
+    
+    ret_code_t err_code;
+    // Create timers.
+    err_code = app_timer_create(&m_sys_timer_id,
+                                APP_TIMER_MODE_REPEATED,
+                                sys_meas_timeout_handler);
+    APP_ERROR_CHECK(err_code);
+}
+
+
+void timer_start(void)
+{
+
+    ret_code_t err_code;
+
+    // Start application timers.
+    err_code = app_timer_start(m_sys_timer_id, SYS_MEAS_INTERVAL, NULL);
+    APP_ERROR_CHECK(err_code);
+}
+
+
+
+
+
+
+
 /**@brief Application main function.
  */
 int main(void)
@@ -702,27 +844,33 @@ int main(void)
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
 
+    timer_init();
+    
     uart_init();
     log_init();
 
     buttons_leds_init(&erase_bonds);
+    
     ble_stack_init();
+    
+    User_Get_Addr();                           //获取mac 地址
+    
     gap_params_init();
     gatt_init();
     services_init();
     advertising_init();
     conn_params_init();
 
-    printf("\r\nUART Start!\r\n");
+    printf("\r\nUART Start123!\r\n");
     NRF_LOG_INFO("UART Start!");
     err_code = ble_advertising_start(&m_advertising,BLE_ADV_MODE_FAST);
     APP_ERROR_CHECK(err_code);
 
     
-    Somputon_Init(&App_RecvHandler);
-
-
-
+    Somputon_Init(&App_RecvHandler);                //注册数据处理函数
+    timer_start();
+    
+    
     // Enter main loop.
     for (;;)
     {

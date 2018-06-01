@@ -1,4 +1,16 @@
 #include "Somputon_BLE_DataHandle.h"
+#include "System_Variable.h"
+
+#include "NUS_Master_DataHandle.h"
+#include "ble_nus.h"
+
+
+
+
+
+uint8_t SendBuffer[256];
+
+
 
 
 
@@ -127,3 +139,31 @@ void Clife_GenerateHisData(void)
 
 
 }
+
+
+
+//设备连接上后主动发起绑定请求认证
+
+void AuthInfo_Request(void)
+{
+    
+    SendBuffer[0] = START_FLAG;                                //数据头
+    SendBuffer[1] = 0x00;                                      //数据长度
+    SendBuffer[2] = 10;
+    SendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
+    
+    memcpy(&SendBuffer[4],&system_work.device_mac_addr,6);     //获取mac 地址
+    
+    
+    SendBuffer[8] =  (uint8_t)(BOND_COMMAND_REPLY>>8);         //命令控制字
+    SendBuffer[9] =  (uint8_t)BOND_COMMAND_REPLY;              //命令控制字
+    
+    SendBuffer[10] = Crc8(&SendBuffer[1],10 - 1);               //crc 校验
+ 
+     //ble_nus_string_send(&m_nus, SendBuffer, 10);
+    
+}
+
+
+
+
