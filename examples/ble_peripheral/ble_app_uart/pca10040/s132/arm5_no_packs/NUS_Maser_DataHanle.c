@@ -128,7 +128,7 @@ void nus_data_handle(uint8_t *data, uint8_t length)
 	    memcpy(&Common_Word.MacAddr_Device,&data_buffer[DATA_DEVICE_MAC_INDEX],6);  //拷贝mac 地址		 	  
 			
 		
-		if(data_buffer[Common_Word.Data_Length -1 ]!= Crc8(&data_buffer[1],data_buffer[Common_Word.Data_Length -2]))  //crc8校验
+		if(data_buffer[Common_Word.Data_Length +2 ]!= Crc8(&data_buffer[1],data_buffer[Common_Word.Data_Length +1]))  //crc8校验
 		{
 			#ifdef UART_MASTER_TEST 
 			NRF_LOG_INFO(" data_buffer crc %d", data_buffer[Common_Word.Data_Length -1]);

@@ -1,13 +1,10 @@
 #ifndef __NUS_MASTER_DATAHANDLE_H
 #define __NUS_MASTER_DATAHANDLE_H
 
-
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "nordic_common.h"
-
-
 
 
 
@@ -24,7 +21,7 @@ typedef enum{
 
 
 
-unsigned char Crc8( unsigned char *Address, unsigned char Length );
+unsigned char Crc8( unsigned char *Address, unsigned char Length);
 void nus_data_handle(uint8_t *data, uint8_t length);
 void get_mac_addr(uint8_t *p_mac_addr);
 void User_Get_Addr(void);

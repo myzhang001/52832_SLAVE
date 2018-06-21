@@ -183,6 +183,8 @@ static void gap_params_init(void)
 }
 
 
+uint8_t buffer[256] = 0;
+
 /**@brief Function for handling the data from the Nordic UART Service.
  *
  * @details This function will process the data received from the Nordic UART BLE Service and send
@@ -196,7 +198,7 @@ static void gap_params_init(void)
 static void nus_data_handler(ble_nus_evt_t * p_evt)
 { 
 
-    uint8_t buffer[256];
+    uint8_t i;
     
     
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
@@ -206,10 +208,25 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         NRF_LOG_DEBUG("Received data from BLE NUS. Writing data on UART.");
         NRF_LOG_HEXDUMP_DEBUG(p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
 
-        memcpy(buffer,p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
+        memcpy(&buffer[0],p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
         
+        #if 1
+        for(i = 0; i < p_evt->params.rx_data.length;i++)
+        {
+            buffer[i] = p_evt->params.rx_data.p_data[i];
+            
+            
+           printf("data[%d] 0x%02x\r\n",i,buffer[i]);
+        }
+        #endif
+       
         nus_data_handle(buffer,p_evt->params.rx_data.length);
          
+
+        
+        
+        
+        
         #if 0
         for (uint32_t i = 0; i < p_evt->params.rx_data.length; i++)
         {
@@ -227,7 +244,6 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         {
             while (app_uart_put('\n') == NRF_ERROR_BUSY);
         }
-        
         #endif
         
         
@@ -744,7 +760,7 @@ static void sys_meas_timeout_handler(void * p_context)
                     length[0] = 14;
                     aSendBuffer[0] = START_FLAG;                                //数据头
                     aSendBuffer[1] = 0x00;                                      //数据长度
-                    aSendBuffer[2] = 13;
+                    aSendBuffer[2] = 11;
                     aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
                     aSendBuffer[4] = 0x08;                                      //设备类型 
                     memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
@@ -772,18 +788,17 @@ static void sys_meas_timeout_handler(void * p_context)
                     length[0] = 15;
                     aSendBuffer[0] = START_FLAG;                                //数据头
                     aSendBuffer[1] = 0x00;                                      //数据长度
-                    aSendBuffer[2] = 14;
+                    aSendBuffer[2] = 12;
                     aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
                     aSendBuffer[4] = 0x08;                                      //设备类型 
                     memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
                     
-                    
-                    aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND>>8);         //命令控制字
-                    aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND;              //命令控制字
-                    aSendBuffer[13] =  0x12;                                            //数据         
-                    aSendBuffer[14] = Crc8(&aSendBuffer[1],13);                      //crc 校验
+                    aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND>>8);   //命令控制字
+                    aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND;        //命令控制字
+                    aSendBuffer[13] =  0x12;                                       //数据         
+                    aSendBuffer[14] = Crc8(&aSendBuffer[1],13);                    //crc 校验
                  
-                    ble_nus_string_send(&m_nus, aSendBuffer, &length[0]);               //发送数据
+                    ble_nus_string_send(&m_nus, aSendBuffer, &length[0]);          //发送数据
                     
                 }
             
@@ -868,7 +883,7 @@ int main(void)
 
     
     Somputon_Init(&App_RecvHandler);                //注册数据处理函数
-    timer_start();
+    //timer_start();
     
     
     // Enter main loop.
@@ -878,6 +893,18 @@ int main(void)
         power_manage();
     }
 }
+
+
+
+
+void send_data_proc(uint8_t *aSendBuffer,uint16_t len)
+{
+    uint16_t length[5]={0};
+    
+    length[0] = len;
+    ble_nus_string_send(&m_nus, aSendBuffer, &length[0]);        //发送数据
+}
+
 
 
 /**

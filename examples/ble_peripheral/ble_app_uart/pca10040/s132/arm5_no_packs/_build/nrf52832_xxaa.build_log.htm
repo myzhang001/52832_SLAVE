@@ -28,13 +28,15 @@ Project File Date:  06/01/2018
 *** Using Compiler 'V5.05 update 2 (build 169)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'nrf52832_xxaa'
 compiling main.c...
-..\..\..\main.c(204): warning:  #177-D: variable "err_code" was declared but never referenced
+..\..\..\main.c(186): warning:  #520-D: initialization with "{...}" expected for aggregate object
+  uint8_t buffer[256] = 0;
+..\..\..\main.c(206): warning:  #177-D: variable "err_code" was declared but never referenced
           uint32_t err_code;
-..\..\..\main.c: 1 warning, 0 errors
+..\..\..\main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=25148 RO-data=3288 RW-data=356 ZI-data=12524  
+Program Size: Code=25364 RO-data=3288 RW-data=356 ZI-data=12780  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 1 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 

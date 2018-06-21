@@ -11,6 +11,8 @@
 uint8_t SendBuffer[256];
 
 
+ 
+extern void send_data_proc(uint8_t *aSendBuffer,uint16_t len);     //发送函数
 
 
 
@@ -24,7 +26,21 @@ uint8_t SendBuffer[256];
  */
 void get_real_time_data_cmd(void)
 {
-	
+	uint8_t aSendBuffer[50];
+    
+    aSendBuffer[0] = START_FLAG;                                //数据头
+    aSendBuffer[1] = 0x00;                                      //数据长度
+    aSendBuffer[2] = 12;
+    aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
+    aSendBuffer[4] = 0x08;                                      //设备类型 
+    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+
+    aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND>>8);   //命令控制字
+    aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND;        //命令控制字
+    aSendBuffer[13] =  0x12;                                       //数据         
+    aSendBuffer[14] = Crc8(&aSendBuffer[1],13);                    //crc 校验
+
+    send_data_proc(aSendBuffer,15);                               //发送数据
 }
 
 
@@ -38,10 +54,23 @@ void get_real_time_data_cmd(void)
  */
 void bond_cmd(void)
 {
-	//dev_info.ble_dev[conn_handle - 1].device_datastruct_index
-	
-	
-	
+    uint8_t aSendBuffer[256];
+
+    
+    aSendBuffer[0] = START_FLAG;                                //数据头
+    aSendBuffer[1] = 0x00;                                      //数据长度
+    aSendBuffer[2] = 11;
+    aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
+    aSendBuffer[4] = 0x08;                                      //设备类型 
+    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+
+
+    aSendBuffer[11] =  (uint8_t)(BOND_COMMAND>>8);         //命令控制字
+    aSendBuffer[12] =  (uint8_t)BOND_COMMAND;              //命令控制字
+
+    aSendBuffer[13] = Crc8(&aSendBuffer[1],12);               //crc 校验
+
+    send_data_proc(aSendBuffer, 14);                       //发送数据
 }
 
 /**@brief clear_history_data_cmd     
@@ -147,20 +176,7 @@ void Clife_GenerateHisData(void)
 void AuthInfo_Request(void)
 {
     
-    SendBuffer[0] = START_FLAG;                                //数据头
-    SendBuffer[1] = 0x00;                                      //数据长度
-    SendBuffer[2] = 10;
-    SendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
-    
-    memcpy(&SendBuffer[4],&system_work.device_mac_addr,6);     //获取mac 地址
-    
-    
-    SendBuffer[8] =  (uint8_t)(BOND_COMMAND_REPLY>>8);         //命令控制字
-    SendBuffer[9] =  (uint8_t)BOND_COMMAND_REPLY;              //命令控制字
-    
-    SendBuffer[10] = Crc8(&SendBuffer[1],10 - 1);               //crc 校验
- 
-     //ble_nus_string_send(&m_nus, SendBuffer, 10);
+  
     
 }
 
