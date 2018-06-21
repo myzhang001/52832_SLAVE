@@ -27,6 +27,8 @@ void Somputon_Init(appRecvHandler_Cb cb)
 
 
 
+uint8_t bond_ack =0;
+
 
 
 
@@ -54,9 +56,11 @@ void App_RecvHandler(uint16_t command, uint8_t* pdata,uint16_t len)
 					 break;		
 			
 			case BOND_COMMAND:
-					bond_cmd();                                //发送绑定指令
+				
+					bond_ack = 1;
+					//bond_cmd();                                //发送绑定指令
                     
-            
+					//printf("------------bond_cmd------------");	
           
 					 break;		
 												

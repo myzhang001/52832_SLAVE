@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.15
 Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: dtu dtu idt Flex license: MDK-ARM Standard: 9 user(s) (mdk_std) Support: Jul 2016
+License Information: zxc Administrator, ZXc, LIC=7YKJJ-UISP9-BV31G-VM5LJ-FD8AD-J8KKW
  
 Tool Versions:
-Toolchain:       MDK-ARM Standard: 9 user(s)  Version: 5.15.0
-Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+Toolchain:       MDK-ARM Professional  Version: 5.15.0
+Toolchain Path:  E:\Program\ARM\ARMCC\Bin
 C Compiler:      Armcc.exe V5.05 update 2 (build 169)
 Assembler:       Armasm.exe V5.05 update 2 (build 169)
 Linker/Locator:  ArmLink.exe V5.05 update 2 (build 169)
@@ -21,22 +21,20 @@ Target DLL:      Segger\JL2CM3.dll V2.99.15.0
 Dialog DLL:      TCM.DLL V1.14.5.0
  
 <h2>Project:</h2>
-D:\somput\ble_slave\nRF5_SDK_14.2.0_17b948a\examples\ble_peripheral\ble_app_uart\pca10040\s132\arm5_no_packs\ble_app_uart_pca10040_s132.uvprojx
-Project File Date:  06/01/2018
+G:\BLE\52832_SLAVE\examples\ble_peripheral\ble_app_uart\pca10040\s132\arm5_no_packs\ble_app_uart_pca10040_s132.uvprojx
+Project File Date:  06/21/2018
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.05 update 2 (build 169)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.05 update 2 (build 169)', folder: 'E:\Program\ARM\ARMCC\Bin'
 Build target 'nrf52832_xxaa'
-compiling main.c...
-..\..\..\main.c(186): warning:  #520-D: initialization with "{...}" expected for aggregate object
-  uint8_t buffer[256] = 0;
-..\..\..\main.c(206): warning:  #177-D: variable "err_code" was declared but never referenced
-          uint32_t err_code;
-..\..\..\main.c: 2 warnings, 0 errors
+compiling Somputon_BLE_DataHandle.c...
+Somputon_BLE_DataHandle.c(59): warning:  #177-D: variable "aSendBuffer" was declared but never referenced
+      uint8_t aSendBuffer[256];
+Somputon_BLE_DataHandle.c: 1 warning, 0 errors
 linking...
-Program Size: Code=25364 RO-data=3288 RW-data=356 ZI-data=12780  
+Program Size: Code=25416 RO-data=3288 RW-data=360 ZI-data=12832  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 2 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -53,10 +51,10 @@ Package Vendor: NordicSemiconductor
    * Component: Startup Version: 8.15.0
 
 <h2>Collection of Component include folders:</h2>
-  D:\somput\ble_slave\nRF5_SDK_14.2.0_17b948a\examples\ble_peripheral\ble_app_uart\pca10040\s132\arm5_no_packs\RTE
-  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
-  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.15.0\Device\Include
-  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.16.0\Device\Include
+  G:\BLE\52832_SLAVE\examples\ble_peripheral\ble_app_uart\pca10040\s132\arm5_no_packs\RTE
+  E:\Program\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
+  E:\Program\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.15.0\Device\Include
+  E:\Program\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.16.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
 
@@ -64,8 +62,8 @@ Package Vendor: NordicSemiconductor
 
    * Component: NordicSemiconductor::Device:Startup:8.15.0
       Source file:   Device\Source\arm\arm_startup_nrf52.s
-      Source file:   Device\Source\system_nrf52.c
       Include file:  Device\Include\system_nrf52.h
+      Source file:   Device\Source\system_nrf52.c
 </pre>
 </body>
 </html>

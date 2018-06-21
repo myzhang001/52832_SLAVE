@@ -126,6 +126,9 @@ static ble_uuid_t m_adv_uuids[]          =                                      
 
 
 
+extern uint8_t bond_ack;
+
+
 
 APP_TIMER_DEF(m_sys_timer_id);                           //系统定时
 
@@ -134,7 +137,7 @@ APP_TIMER_DEF(m_sys_timer_id);                           //系统定时
 uint8_t conn_flag = 0;       //连接标志
 
 
-
+uint8_t mac_addr[6];
 
 /**@brief Function for assert macro callback.
  *
@@ -183,7 +186,7 @@ static void gap_params_init(void)
 }
 
 
-uint8_t buffer[256] = 0;
+uint8_t buffer[256];
 
 /**@brief Function for handling the data from the Nordic UART Service.
  *
@@ -210,7 +213,7 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 
         memcpy(&buffer[0],p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
         
-        #if 1
+        #if 0
         for(i = 0; i < p_evt->params.rx_data.length;i++)
         {
             buffer[i] = p_evt->params.rx_data.p_data[i];
@@ -747,15 +750,23 @@ static void sys_meas_timeout_handler(void * p_context)
     
     static uint8_t cnt = 0;
     
+	
+	 for(uint8_t i = 0; i < 6;i++)
+    {
+        
+        printf("0x%02x : ",system_work.device_mac_addr[i]);
+		
+    }
     
     switch(work_step)
     {
         case 0:
            //步骤1 发起设备绑定指令
        
-            if(conn_flag == 1)       //连接上
+            if((conn_flag == 1) && (bond_ack == 1))       //连接上
             {
-               
+               bond_ack = 0;
+				
                 {
                     length[0] = 14;
                     aSendBuffer[0] = START_FLAG;                                //数据头
@@ -883,7 +894,7 @@ int main(void)
 
     
     Somputon_Init(&App_RecvHandler);                //注册数据处理函数
-    //timer_start();
+    timer_start();
     
     
     // Enter main loop.

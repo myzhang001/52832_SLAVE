@@ -9,7 +9,7 @@
 
 
 uint8_t SendBuffer[256];
-
+extern uint8_t mac_addr[6];
 
  
 extern void send_data_proc(uint8_t *aSendBuffer,uint16_t len);     //发送函数
@@ -33,7 +33,7 @@ void get_real_time_data_cmd(void)
     aSendBuffer[2] = 12;
     aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
     aSendBuffer[4] = 0x08;                                      //设备类型 
-    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+    //memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
 
     aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND>>8);   //命令控制字
     aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND;        //命令控制字
@@ -43,6 +43,8 @@ void get_real_time_data_cmd(void)
     send_data_proc(aSendBuffer,15);                               //发送数据
 }
 
+
+uint8_t send_buff[50];
 
 /**@brief clear_history_data_cmd     
  *
@@ -57,20 +59,21 @@ void bond_cmd(void)
     uint8_t aSendBuffer[256];
 
     
-    aSendBuffer[0] = START_FLAG;                                //数据头
-    aSendBuffer[1] = 0x00;                                      //数据长度
-    aSendBuffer[2] = 11;
-    aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
-    aSendBuffer[4] = 0x08;                                      //设备类型 
-    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+    send_buff[0] = START_FLAG;                                //数据头
+    send_buff[1] = 0x00;                                      //数据长度
+    send_buff[2] = 11;
+    send_buff[3] = PROTOCOL_VERSION;                          //协议版本号
+    send_buff[4] = 0x08;                                      //设备类型 
+    memcpy(&send_buff[5],&system_work.device_mac_addr[0],6);     //获取mac 地址
+	
+	
+	
+    send_buff[11] =  (uint8_t)(BOND_COMMAND_REPLY>>8);         //命令控制字
+    send_buff[12] =  (uint8_t)BOND_COMMAND_REPLY;              //命令控制字
 
+    send_buff[13] = Crc8(&send_buff[1],12);               //crc 校验
 
-    aSendBuffer[11] =  (uint8_t)(BOND_COMMAND>>8);         //命令控制字
-    aSendBuffer[12] =  (uint8_t)BOND_COMMAND;              //命令控制字
-
-    aSendBuffer[13] = Crc8(&aSendBuffer[1],12);               //crc 校验
-
-    send_data_proc(aSendBuffer, 14);                       //发送数据
+    send_data_proc(send_buff, 14);                       //发送数据
 }
 
 /**@brief clear_history_data_cmd     
