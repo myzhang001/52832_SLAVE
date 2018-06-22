@@ -33,10 +33,10 @@ void get_real_time_data_cmd(void)
     aSendBuffer[2] = 12;
     aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
     aSendBuffer[4] = 0x00;                                      //设备类型 
-    //memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
+    memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
 
-    aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND>>8);   //命令控制字
-    aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND;        //命令控制字
+    aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND_REPLY>>8);   //命令控制字
+    aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND_REPLY;        //命令控制字
     aSendBuffer[13] =  0x12;                                       //数据         
     aSendBuffer[14] = Crc8(&aSendBuffer[1],13);                    //crc 校验
 
