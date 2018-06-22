@@ -88,10 +88,12 @@ void User_Get_Addr(void)
         printf("0x%02x : ",system_work.device_mac_addr[i]);
 		
     }
+    #if 0
     mac_addr[0] = system_work.device_mac_addr[5];
     mac_addr[1] = system_work.device_mac_addr[4];
 	mac_addr[2] = system_work.device_mac_addr[3];
-	
+	#endif
+    
     #endif
     
 
@@ -108,7 +110,7 @@ void nus_data_handle(uint8_t *data, uint8_t length)
 	uint8_t data_buffer[100];       	//接收数据缓冲区大小
 	
 	memcpy(data_buffer,data,length);
-	memset(data,0,length);
+	//memset(data,0,length);
 	
 	//printf("------------------------------");
 	//答应接收的数据
@@ -118,8 +120,6 @@ void nus_data_handle(uint8_t *data, uint8_t length)
         printf("\r\nDATA 0x%02x \r\n",data_buffer[i]);
     }
     #endif
-	
-	
 	
 	if(data_buffer[0]!= START_FLAG)	
 	{
@@ -145,7 +145,7 @@ void nus_data_handle(uint8_t *data, uint8_t length)
 		
 		Common_Word.Device_Type = data_buffer[DATA_DEVICE_TYPE_INDEX];     //获取设备类型
 		
-	    memcpy(&Common_Word.MacAddr_Device,&data_buffer[DATA_DEVICE_MAC_INDEX],6);  //拷贝mac 地址		 	  
+	    //memcpy(&Common_Word.MacAddr_Device,&data[DATA_DEVICE_MAC_INDEX],6);  //拷贝mac 地址		 	  
 			
 		
 		

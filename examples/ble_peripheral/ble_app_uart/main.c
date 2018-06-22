@@ -186,7 +186,7 @@ static void gap_params_init(void)
 }
 
 
-uint8_t buffer[256];
+uint8_t buffer[50];
 
 /**@brief Function for handling the data from the Nordic UART Service.
  *
@@ -211,25 +211,19 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         NRF_LOG_DEBUG("Received data from BLE NUS. Writing data on UART.");
         NRF_LOG_HEXDUMP_DEBUG(p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
 
-        memcpy(&buffer[0],p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
+        //memcpy(&buffer[0],p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
         
-        #if 0
+        #if 1
         for(i = 0; i < p_evt->params.rx_data.length;i++)
         {
             buffer[i] = p_evt->params.rx_data.p_data[i];
-            
-            
-           printf("data[%d] 0x%02x\r\n",i,buffer[i]);
+            printf("data[%d] 0x%02x\r\n",i,buffer[i]);
         }
         #endif
        
         nus_data_handle(buffer,p_evt->params.rx_data.length);
          
 
-        
-        
-        
-        
         #if 0
         for (uint32_t i = 0; i < p_evt->params.rx_data.length; i++)
         {
@@ -762,7 +756,7 @@ static void sys_meas_timeout_handler(void * p_context)
     {
         case 0:
            //步骤1 发起设备绑定指令
-       
+       #if 0
             if((conn_flag == 1) && (bond_ack == 1))       //连接上
             {
                bond_ack = 0;
@@ -787,8 +781,8 @@ static void sys_meas_timeout_handler(void * p_context)
                 }
 
             }
-            
-            work_step = 1;
+            #endif
+            work_step = 0;
         
             break;
         case 1:
@@ -894,7 +888,7 @@ int main(void)
 
     
     Somputon_Init(&App_RecvHandler);                //注册数据处理函数
-    timer_start();
+    //timer_start();
     
     
     // Enter main loop.
