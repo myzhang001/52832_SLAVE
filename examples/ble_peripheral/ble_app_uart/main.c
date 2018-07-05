@@ -890,6 +890,7 @@ int main(void)
     Somputon_Init(&App_RecvHandler);                //注册数据处理函数
     //timer_start();
     
+    bond_cmd();
     
     // Enter main loop.
     for (;;)

@@ -30,17 +30,18 @@ void get_real_time_data_cmd(void)
     
     aSendBuffer[0] = START_FLAG;                                //数据头
     aSendBuffer[1] = 0x00;                                      //数据长度
-    aSendBuffer[2] = 12;
+    aSendBuffer[2] = 13;
     aSendBuffer[3] = PROTOCOL_VERSION;                          //协议版本号
-    aSendBuffer[4] = 0x00;                                      //设备类型 
+    aSendBuffer[4] = 0x01;                                      //设备类型 
     memcpy(&aSendBuffer[5],&system_work.device_mac_addr,6);     //获取mac 地址
 
     aSendBuffer[11] =  (uint8_t)(GET_REAL_TIME_DATA_COMMAND_REPLY>>8);   //命令控制字
     aSendBuffer[12] =  (uint8_t)GET_REAL_TIME_DATA_COMMAND_REPLY;        //命令控制字
-    aSendBuffer[13] =  0x12;                                       //数据         
-    aSendBuffer[14] = Crc8(&aSendBuffer[1],13);                    //crc 校验
+    aSendBuffer[13] =  0x12;                                       //数据
+    aSendBuffer[14] =  0x01;    
+    aSendBuffer[15] = Crc8(&aSendBuffer[1],14);                    //crc 校验
 
-    send_data_proc(aSendBuffer,15);                               //发送数据
+    send_data_proc(aSendBuffer,16);                               //发送数据
 }
 
 
@@ -63,8 +64,8 @@ void bond_cmd(void)
     send_buff[1] = 0x00;                                      //数据长度
     send_buff[2] = 11;
     send_buff[3] = PROTOCOL_VERSION;                          //协议版本号
-    send_buff[4] = 0x00;                                      //设备类型 
-    memcpy(&send_buff[5],&system_work.device_mac_addr[0],6);     //获取mac 地址
+    send_buff[4] = 0x01;                                      //设备类型 
+    memcpy(&send_buff[5],&system_work.device_mac_addr[0],6);  //获取mac 地址
 	
 	
 	

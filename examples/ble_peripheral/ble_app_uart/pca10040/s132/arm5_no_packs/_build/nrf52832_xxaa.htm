@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\_build\nrf52832_xxaa.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\_build\nrf52832_xxaa.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050169: Last Updated: Fri Jun 22 17:46:16 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050169: Last Updated: Thu Jun 28 10:40:48 2018
 <BR><P>
 <H3>Maximum Stack Usage =        716 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -471,8 +471,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Crc8
 </UL>
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_real_time_data_cmd
-<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bond_cmd
 <LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nus_data_handle
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bond_cmd
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_meas_timeout_handler
 </UL>
 
@@ -893,6 +893,7 @@ Global Symbols
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_data_proc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_RecvHandler
+<LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[eb]"></a>bsp_board_button_idx_to_pin</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, boards.o(i.bsp_board_button_idx_to_pin))
@@ -1076,7 +1077,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;User_Get_Addr
 </UL>
 
-<P><STRONG><a name="[64]"></a>get_real_time_data_cmd</STRONG> (Thumb, 90 bytes, Stack size 56 bytes, somputon_ble_datahandle.o(i.get_real_time_data_cmd))
+<P><STRONG><a name="[64]"></a>get_real_time_data_cmd</STRONG> (Thumb, 94 bytes, Stack size 56 bytes, somputon_ble_datahandle.o(i.get_real_time_data_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = get_real_time_data_cmd &rArr; send_data_proc &rArr; ble_nus_string_send
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Crc8
@@ -1085,7 +1086,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_RecvHandler
 </UL>
 
-<P><STRONG><a name="[2f]"></a>main</STRONG> (Thumb, 316 bytes, Stack size 40 bytes, main.o(i.main))
+<P><STRONG><a name="[2f]"></a>main</STRONG> (Thumb, 320 bytes, Stack size 40 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 484<LI>Call Chain = main &rArr; advertising_init &rArr; app_error_handler &rArr; app_error_fault_handler &rArr; nrf_log_frontend_std_4 &rArr; std_n &rArr; nrf_log_frontend_dequeue &rArr; nrf_memobj_alloc &rArr; nrf_memobj_free &rArr; nrf_balloc_free &rArr; app_util_critical_region_enter
 </UL>
 <BR>[Calls]<UL><LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf_log_init
@@ -1094,6 +1095,7 @@ Global Symbols
 <LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf_log_default_backends_init
 <LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_init
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_btn_ble_init
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bond_cmd
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_nus_init
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_conn_params_init
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_advertising_start

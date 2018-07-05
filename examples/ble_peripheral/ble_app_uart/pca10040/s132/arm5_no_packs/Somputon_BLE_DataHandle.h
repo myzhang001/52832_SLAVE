@@ -25,7 +25,7 @@ void get_device_time_cmd(uint32_t second);
 void control_device_cmd(uint8_t *ctrl_data);
 void Clife_GetHisData(uint16_t cmd, uint8_t* data, uint16_t len);
 void Clife_GenerateHisData(void);
-
+void bond_cmd(void);
 
 
 
