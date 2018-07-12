@@ -14,10 +14,7 @@
 
 extern uint8_t mac_addr[6];
 
-
-
 typedef struct{
-
 	uint8_t  Data_Length;      //保存数据长度
 	uint16_t Common_World;     //保存命令字
 	uint8_t  Device_Type;      //设备类型
