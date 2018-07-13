@@ -80,7 +80,9 @@ void App_RecvHandler(uint16_t command, uint8_t* pdata,uint16_t len)
 			
 
 			case CONTROL_DATA_COMMAND:
-					 //control_device_cmd(data);				//处理控制数据	   	
+					 //control_device_cmd(data);				//处理控制数据	 
+                    printf("ok");
+            
 					break;			
 															
 			default:				

@@ -27,15 +27,16 @@ Project File Date:  06/01/2018
 <h2>Output:</h2>
 *** Using Compiler 'V5.05 update 2 (build 169)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'nrf52832_xxaa'
-compiling NUS_Maser_DataHanle.c...
-NUS_Maser_DataHanle.c(62): warning:  #550-D: variable "error_code" was set but never used
-                uint32_t error_code;
-NUS_Maser_DataHanle.c: 1 warning, 0 errors
-compiling System_Variable.c...
+compiling main.c...
+..\..\..\main.c(209): warning:  #177-D: variable "err_code" was declared but never referenced
+          uint32_t err_code;
+..\..\..\main.c(893): warning:  #223-D: function "bond_cmd" declared implicitly
+      bond_cmd();
+..\..\..\main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=25300 RO-data=3288 RW-data=356 ZI-data=12628  
+Program Size: Code=25432 RO-data=3288 RW-data=356 ZI-data=12724  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 1 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -97,7 +97,9 @@ void User_Get_Addr(void)
 }
 
 
+static uint8_t s_data_buffer[100];  //存放临时变量
 
+static uint8_t step_status = 0;
 
 
 //处理串口数据
@@ -117,7 +119,152 @@ void nus_data_handle(uint8_t *data, uint8_t length)
         printf("\r\nDATA 0x%02x \r\n",data_buffer[i]);
     }
     #endif
-	
+
+    
+    if(data_buffer[0] == START_FLAG  && length == 20)   //第一包起始
+    {
+        //step = E_ONLY_DATA;
+        Common_Word.Data_Length  = data_buffer[DATA_LENGTH_INDIX_LOW];    //获取数据包长度
+		Common_Word.Data_Length    = Common_Word.Data_Length>>8;
+		Common_Word.Data_Length |= data_buffer[DATA_LENGTH_INDIX_HIGH];
+		
+        //NRF_LOG_INFO("DATA LENGHT : %d",Common_Word.Data_Length);
+        
+		Common_Word.Common_World = data_buffer[DATA_COMMOND_WORD ];	      //获取命令字
+		Common_Word.Common_World = Common_Word.Common_World << 8;
+		Common_Word.Common_World |= data_buffer[DATA_COMMOND_WORD +1 ];        
+		
+        //NRF_LOG_INFO("COMMAND WORLD:  0X%04x",Common_Word.Common_World);
+        
+		
+		Common_Word.Device_Type = data_buffer[DATA_DEVICE_TYPE_INDEX];     //获取设备类型
+		
+	    memcpy(&Common_Word.MacAddr_Device,&data_buffer[DATA_DEVICE_MAC_INDEX],6);  //拷贝mac 地址
+             
+        step_status = 1;
+        
+        memcpy(&s_data_buffer,data_buffer,20);
+        
+        
+        #if 0
+        for(uint8_t i = 0; i < 20;i++)
+        {
+            NRF_LOG_INFO("ZMY_DATA[%d] = 0x%02x ",i,s_data_buffer[i]);
+        }
+        #endif
+        
+         //step = E_MULTI_DATA_START;
+    }
+    else if(data_buffer[0] != START_FLAG && length < 20) 
+    {
+        if( step_status == 1)
+        {
+            memcpy(&s_data_buffer[20],data_buffer,length);
+            step_status = 0;
+            
+            #if 0
+            for(uint8_t i = 0; i < length;i++)
+            {
+                NRF_LOG_INFO("ZMY_DATA[%d] = 0x%02x ",i,s_data_buffer[20+i]);
+            }
+            #endif
+            
+           //memcpy(&data_buffer[20],s_data_buffer,20 + length - 1);
+
+            #if 0
+            for(uint8_t i = 0; i < 20 + length;i++)
+            {
+                NRF_LOG_INFO("ZMY_DATA[%d] = 0x%02x ",i,s_data_buffer[i]);
+            }
+            #endif
+            
+            if(s_data_buffer[Common_Word.Data_Length + 2]!= Crc8(&s_data_buffer[1],Common_Word.Data_Length + 1))  //crc8校验
+            {
+                //#ifdef UART_MASTER_TEST 
+                //NRF_LOG_INFO(" data_buffer crc 0x%02x",s_data_buffer[Common_Word.Data_Length]);
+                
+                //NRF_LOG_INFO("CRC ERROR");
+                //#endif
+                return;
+            }
+            //处理数据内容
+            
+            
+            
+            if(receive_data_from_app != NULL)
+            {
+                receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length);
+                #if 0
+                receive_data_from_app((uint16_t)nus_c_conn_handle,Common_Word.Common_World,
+                &s_data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length - 11,
+                Common_Word.Device_Type,Common_Word.MacAddr_Device);
+                #endif
+            }
+            
+            //memset(,,);
+        }
+        else
+        {
+            step_status = 0;
+            return ;
+        }
+       
+         //step = E_MULTI_DATA_MIDDLE;   
+    }
+    else if(data_buffer[0] == START_FLAG && length < 20  )                //正常所有低于20字节的数据包
+    {
+        
+        //step = E_ONLY_DATA;
+        Common_Word.Data_Length  = data_buffer[DATA_LENGTH_INDIX_LOW];    //获取数据包长度
+		Common_Word.Data_Length = Common_Word.Data_Length>>8;
+		Common_Word.Data_Length |= data_buffer[DATA_LENGTH_INDIX_HIGH];
+		
+        //NRF_LOG_INFO("DATA LENGHT : %d",Common_Word.Data_Length);
+        
+		Common_Word.Common_World = data_buffer[DATA_COMMOND_WORD ];	      //获取命令字
+		Common_Word.Common_World = Common_Word.Common_World << 8;
+		Common_Word.Common_World |= data_buffer[DATA_COMMOND_WORD +1 ];        
+		
+        //NRF_LOG_INFO("COMMAND WORLD:  0X%04x",Common_Word.Common_World);
+        
+		
+		Common_Word.Device_Type = data_buffer[DATA_DEVICE_TYPE_INDEX];     //获取设备类型
+		
+	    memcpy(&Common_Word.MacAddr_Device,&data_buffer[DATA_DEVICE_MAC_INDEX],6);  //拷贝mac 地址		 	  
+			
+		
+		if(data_buffer[Common_Word.Data_Length + 2]!= Crc8(&data_buffer[1],Common_Word.Data_Length + 1))  //crc8校验
+		{
+			//#ifdef UART_MASTER_TEST 
+			//NRF_LOG_INFO(" data_buffer crc 0x%02x",Crc8(&data_buffer[1],Common_Word.Data_Length + 1));
+			
+			//NRF_LOG_INFO("CRC ERROR");
+			//#endif
+			return;
+		}
+		//处理数据内容
+		
+		if(receive_data_from_app != NULL)
+		{
+            receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length);
+            #if 0
+			receive_data_from_app((uint16_t)nus_c_conn_handle,Common_Word.Common_World,
+            &data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length - 11,
+            Common_Word.Device_Type,Common_Word.MacAddr_Device);
+            #endif
+            
+		}
+        
+    }    
+    else
+    {
+        return ;
+    }
+    
+    
+    
+    
+    #if 0
 	if(data_buffer[0]!= START_FLAG)	
 	{
 		return;
@@ -163,6 +310,11 @@ void nus_data_handle(uint8_t *data, uint8_t length)
 			receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length);
 		}
 	}
+    #endif
+    
+    
+    
+    
 }
 
 
