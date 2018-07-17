@@ -87,6 +87,12 @@
 
 
 
+#include "nrf_dfu_svci.h"
+#include "nrf_svci_async_function.h"
+#include "nrf_svci_async_handler.h"
+
+#include "ble_dfu.h"
+
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
@@ -217,7 +223,7 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         for(i = 0; i < p_evt->params.rx_data.length;i++)
         {
             buffer[i] = p_evt->params.rx_data.p_data[i];
-            printf("data[%d] 0x%02x\r\n",i,buffer[i]);
+            //printf("data[%d] 0x%02x\r\n",i,buffer[i]);
         }
         #endif
        
@@ -249,12 +255,67 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 }
 /**@snippet [Handling the data received over BLE] */
 
+static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
+{
+    switch (event)
+    {
+        case BLE_DFU_EVT_BOOTLOADER_ENTER_PREPARE:
+            NRF_LOG_INFO("Device is preparing to enter bootloader mode.");
+            // YOUR_JOB: Disconnect all bonded devices that currently are connected.
+            //           This is required to receive a service changed indication
+            //           on bootup after a successful (or aborted) Device Firmware Update.
+            break;
+
+        case BLE_DFU_EVT_BOOTLOADER_ENTER:
+            // YOUR_JOB: Write app-specific unwritten data to FLASH, control finalization of this
+            //           by delaying reset by reporting false in app_shutdown_handler
+            NRF_LOG_INFO("Device will enter bootloader mode.");
+            break;
+
+        case BLE_DFU_EVT_BOOTLOADER_ENTER_FAILED:
+            NRF_LOG_ERROR("Request to enter bootloader mode failed asynchroneously.");
+            // YOUR_JOB: Take corrective measures to resolve the issue
+            //           like calling APP_ERROR_CHECK to reset the device.
+            break;
+
+        case BLE_DFU_EVT_RESPONSE_SEND_ERROR:
+            NRF_LOG_ERROR("Request to send a response to client failed.");
+            // YOUR_JOB: Take corrective measures to resolve the issue
+            //           like calling APP_ERROR_CHECK to reset the device.
+            APP_ERROR_CHECK(false);
+            break;
+
+        default:
+            NRF_LOG_ERROR("Unknown event from ble_dfu_buttonless.");
+            break;
+    }
+}
+
+
+
 
 /**@brief Function for initializing services that will be used by the application.
  */
 static void services_init(void)
 {
     uint32_t       err_code;
+    
+    #if 0
+    ble_dfu_buttonless_init_t dfus_init =
+    {
+        .evt_handler = ble_dfu_evt_handler
+    };
+
+    // Initialize the async SVCI interface to bootloader.
+    err_code = ble_dfu_buttonless_async_svci_init();
+    APP_ERROR_CHECK(err_code);
+
+
+    err_code = ble_dfu_buttonless_init(&dfus_init);
+    APP_ERROR_CHECK(err_code);
+    #endif
+
+    
     ble_nus_init_t nus_init;
 
     memset(&nus_init, 0, sizeof(nus_init));
@@ -873,7 +934,7 @@ int main(void)
     
     ble_stack_init();
     
-    User_Get_Addr();                           //获取mac 地址
+    User_Get_Addr();                               //获取mac 地址
     
     gap_params_init();
     gatt_init();

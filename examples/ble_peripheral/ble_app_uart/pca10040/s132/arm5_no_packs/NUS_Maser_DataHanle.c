@@ -193,7 +193,8 @@ void nus_data_handle(uint8_t *data, uint8_t length)
             
             if(receive_data_from_app != NULL)
             {
-                receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length);
+                receive_data_from_app(Common_Word.Common_World,&s_data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length - 11);
+                
                 #if 0
                 receive_data_from_app((uint16_t)nus_c_conn_handle,Common_Word.Common_World,
                 &s_data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length - 11,

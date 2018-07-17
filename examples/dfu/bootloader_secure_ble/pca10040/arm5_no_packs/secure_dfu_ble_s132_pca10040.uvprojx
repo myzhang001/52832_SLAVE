@@ -5,15 +5,18 @@
 
   <Header>### uVision Project, (C) Keil Software</Header>
 
-  <Targets>    <Target>
+  <Targets>
+    <Target>
       <TargetName>nrf52832_xxaa_s132</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
-        <TargetCommonOption>          <Device>nRF52832_xxAA</Device>
+        <TargetCommonOption>
+          <Device>nRF52832_xxAA</Device>
           <Vendor>Nordic Semiconductor</Vendor>
-          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.15.0</PackID>
-          <PackURL>http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/</PackURL>          <Cpu>IROM(0x00000000,0x80000) IRAM(0x20000000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(64000000) ELITTLE</Cpu>
+          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.16.0</PackID>
+          <PackURL>http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/</PackURL>
+          <Cpu>IROM(0x00000000,0x80000) IRAM(0x20000000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(64000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -143,9 +146,10 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>            <UsePdscDebugDescription>1</UsePdscDebugDescription>          </Target>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>-1</TargetSelection>
+          <TargetSelection>6</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -175,6 +179,10 @@
           <Flash2>Segger\JL2CM3.dll</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
+          <pFcarmOut></pFcarmOut>
+          <pFcarmGrp></pFcarmGrp>
+          <pFcArmRoot></pFcArmRoot>
+          <FcArmLst>0</FcArmLst>
         </Utilities>
         <TargetArmAds>
           <ArmAdsMisc>
@@ -221,7 +229,6 @@
             <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
-            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -358,8 +365,6 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
-            <vShortEn>0</vShortEn>
-            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls>--reduce_paths</MiscControls>
               <Define> BLE_STACK_SUPPORT_REQD BOARD_PCA10040 CONFIG_GPIO_AS_PINRESET FLOAT_ABI_HARD NRF52 NRF52832_XXAA NRF52_PAN_74 NRF_DFU_SETTINGS_VERSION=1 NRF_DFU_SVCI_ENABLED NRF_SD_BLE_API_VERSION=5 S132 SOFTDEVICE_PRESENT SVC_INTERFACE_CALL_AS_NORMAL_FUNCTION SWI_DISABLE0 __HEAP_SIZE=0</Define>
@@ -403,257 +408,451 @@
           </LDads>
         </TargetArmAds>
       </TargetOption>
-      <Groups>        <Group>
+      <Groups>
+        <Group>
           <GroupName>None</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>dfu-cc.pb.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\dfu_req_handling\dfu-cc.pb.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\dfu_req_handling\dfu-cc.pb.c</FilePath>
+            </File>
+            <File>
               <FileName>dfu_public_key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\dfu_req_handling\dfu_public_key.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\dfu_req_handling\dfu_public_key.c</FilePath>
+            </File>
+            <File>
               <FileName>dfu_req_handling.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\dfu_req_handling\dfu_req_handling.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\dfu_req_handling\dfu_req_handling.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Application</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\main.c</FilePath>            </File>            <File>
+              <FilePath>..\..\main.c</FilePath>
+            </File>
+            <File>
               <FileName>sdk_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\config\sdk_config.h</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\config\sdk_config.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Board Definition</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>boards.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\boards\boards.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\boards\boards.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_BLE</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>ble_srv_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\ble\common\ble_srv_common.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\ble\common\ble_srv_common.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_BLE_DFU</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>nrf_ble_dfu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\ble_dfu\nrf_ble_dfu.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\ble_dfu\nrf_ble_dfu.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_Bootloader</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>nrf_bootloader.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_bootloader_app_start.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader_app_start.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader_app_start.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_bootloader_app_start_asm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader_app_start_asm.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader_app_start_asm.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_bootloader_info.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader_info.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\nrf_bootloader_info.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_flash.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_handling_error.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_handling_error.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_handling_error.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_mbr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_mbr.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_mbr.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_settings.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_settings.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_settings.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_settings_svci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_settings_svci.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_settings_svci.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_transport.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_transport.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_transport.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_utils.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_utils.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_Crypto</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>nrf_crypto_ecdh.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_ecdh.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_ecdh.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_ecdsa.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_ecdsa.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_ecdsa.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_hash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_hash.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_hash.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_init.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_init.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_keys.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_keys.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_keys.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_mem.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_mem.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_rng.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\nrf_crypto_rng.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_Crypto backends</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>micro_ecc_lib_ecdh.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_ecdh.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_ecdh.c</FilePath>
+            </File>
+            <File>
               <FileName>micro_ecc_lib_ecdsa.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_ecdsa.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_ecdsa.c</FilePath>
+            </File>
+            <File>
               <FileName>micro_ecc_lib_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_init.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_init.c</FilePath>
+            </File>
+            <File>
               <FileName>micro_ecc_lib_keys.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_keys.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_keys.c</FilePath>
+            </File>
+            <File>
               <FileName>micro_ecc_lib_shared.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_shared.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_shared.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_sw_hash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\nrf_crypto_sw\nrf_crypto_sw_hash.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\nrf_crypto_sw\nrf_crypto_sw_hash.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_crypto_sw_rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\nrf_crypto_sw\nrf_crypto_sw_rng.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\libraries\crypto\backend\nrf_crypto_sw\nrf_crypto_sw_rng.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_Drivers</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>nrf_drv_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\drivers_nrf\clock\nrf_drv_clock.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\drivers_nrf\clock\nrf_drv_clock.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_drv_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\drivers_nrf\common\nrf_drv_common.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\drivers_nrf\common\nrf_drv_common.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_drv_rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\drivers_nrf\rng\nrf_drv_rng.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\drivers_nrf\rng\nrf_drv_rng.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_nvmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\drivers_nrf\hal\nrf_nvmc.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\drivers_nrf\hal\nrf_nvmc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_Libraries</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>app_error_weak.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\util\app_error_weak.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\util\app_error_weak.c</FilePath>
+            </File>
+            <File>
               <FileName>app_scheduler.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\scheduler\app_scheduler.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\scheduler\app_scheduler.c</FilePath>
+            </File>
+            <File>
               <FileName>app_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\timer\app_timer.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\timer\app_timer.c</FilePath>
+            </File>
+            <File>
               <FileName>app_util_platform.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\util\app_util_platform.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\util\app_util_platform.c</FilePath>
+            </File>
+            <File>
               <FileName>crc32.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\crc32\crc32.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\crc32\crc32.c</FilePath>
+            </File>
+            <File>
               <FileName>hci_mem_pool.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\hci\hci_mem_pool.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\hci\hci_mem_pool.c</FilePath>
+            </File>
+            <File>
               <FileName>mem_manager.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\mem_manager\mem_manager.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\mem_manager\mem_manager.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_assert.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\util\nrf_assert.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\util\nrf_assert.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_atfifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\atomic_fifo\nrf_atfifo.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\atomic_fifo\nrf_atfifo.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_fstorage.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\fstorage\nrf_fstorage.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\fstorage\nrf_fstorage.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_fstorage_nvmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\fstorage\nrf_fstorage_nvmc.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\fstorage\nrf_fstorage_nvmc.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_fstorage_sd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\fstorage\nrf_fstorage_sd.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\fstorage\nrf_fstorage_sd.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\queue\nrf_queue.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\queue\nrf_queue.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_section_iter.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\experimental_section_vars\nrf_section_iter.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\experimental_section_vars\nrf_section_iter.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_strerror.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\strerror\nrf_strerror.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\strerror\nrf_strerror.c</FilePath>
+            </File>
+            <File>
               <FileName>sha256.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\sha256\sha256.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\libraries\sha256\sha256.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_SVC</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>nrf_dfu_svci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_svci.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_svci.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_dfu_svci_handler.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_svci_handler.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_svci_handler.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_svc_handler.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\libraries\svc\nrf_svc_handler.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\libraries\svc\nrf_svc_handler.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_SoftDevice</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>nrf_sdh.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\softdevice\common\nrf_sdh.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\softdevice\common\nrf_sdh.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_sdh_ble.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\softdevice\common\nrf_sdh_ble.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\components\softdevice\common\nrf_sdh_ble.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_sdh_soc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\components\softdevice\common\nrf_sdh_soc.c</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\components\softdevice\common\nrf_sdh_soc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nRF_micro-ecc</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>micro_ecc_lib_nrf52.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\..\..\..\..\external\micro-ecc\nrf52hf_keil\armgcc\micro_ecc_lib_nrf52.lib</FilePath>            </File>          </Files>
-        </Group>        <Group>
+              <FilePath>..\..\..\..\..\external\micro-ecc\nrf52hf_keil\armgcc\micro_ecc_lib_nrf52.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>nano-pb</GroupName>
-          <Files>            <File>
+          <Files>
+            <File>
               <FileName>pb_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\external\nano-pb\pb_common.c</FilePath>            </File>            <File>
+              <FilePath>..\..\..\..\..\external\nano-pb\pb_common.c</FilePath>
+            </File>
+            <File>
               <FileName>pb_decode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\external\nano-pb\pb_decode.c</FilePath>            </File>          </Files>
-        </Group>      </Groups>
-    </Target>  </Targets><RTE>
-  <packages>
-    <filter>
-      <targetInfos/>
-    </filter>    <package name="CMSIS" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0">
-      <targetInfos>        <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>      </targetInfos>
-    </package>
-    <package name="nRF_DeviceFamilyPack" url="http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.15.0">
-      <targetInfos>        <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>      </targetInfos>
-    </package>  </packages>
-  <apis/>
-  <components>    <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.3.0" condition="CMSIS Core">
-      <package name="CMSIS" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0"/>
-      <targetInfos>        <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>      </targetInfos>
-    </component>
-    <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.15.0" condition="nRF5x Series CMSIS Device">
-      <package name="nRF_DeviceFamilyPack" url="http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.15.0"/>
-      <targetInfos>        <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>      </targetInfos>
-    </component>  </components>
-  <files>  </files>
-</RTE>
+              <FilePath>..\..\..\..\..\external\nano-pb\pb_decode.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
+        </Group>
+        <Group>
+          <GroupName>::Device</GroupName>
+        </Group>
+      </Groups>
+    </Target>
+  </Targets>
+
+  <RTE>
+    <packages>
+      <filter>
+        <targetInfos/>
+      </filter>
+      <package name="CMSIS" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0">
+        <targetInfos>
+          <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+      <package name="nRF_DeviceFamilyPack" url="http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.15.0">
+        <targetInfos>
+          <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+    </packages>
+    <apis/>
+    <components>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.3.0" condition="CMSIS Core">
+        <package name="CMSIS" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0"/>
+        <targetInfos>
+          <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.15.0" condition="nRF5x Series CMSIS Device">
+        <package name="nRF_DeviceFamilyPack" url="http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.15.0"/>
+        <targetInfos>
+          <targetInfo name="nrf52832_xxaa_s132" versionMatchMode="fixed"/>
+        </targetInfos>
+      </component>
+    </components>
+    <files>
+      <file attr="config" category="source" condition="ARM Compiler" name="Device\Source\arm\arm_startup_nrf52.s">
+        <instance index="0">RTE\Device\nRF52832_xxAA\arm_startup_nrf52.s</instance>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.15.0" condition="nRF52832 Device and CMSIS"/>
+        <package license="License\license.txt" name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.15.0"/>
+        <targetInfos>
+          <targetInfo name="nrf52832_xxaa_s132"/>
+        </targetInfos>
+      </file>
+      <file attr="config" category="source" name="Device\Source\system_nrf52.c">
+        <instance index="0">RTE\Device\nRF52832_xxAA\system_nrf52.c</instance>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.15.0" condition="nRF52832 Device and CMSIS"/>
+        <package license="License\license.txt" name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.15.0"/>
+        <targetInfos>
+          <targetInfo name="nrf52832_xxaa_s132"/>
+        </targetInfos>
+      </file>
+    </files>
+  </RTE>
+
 </Project>

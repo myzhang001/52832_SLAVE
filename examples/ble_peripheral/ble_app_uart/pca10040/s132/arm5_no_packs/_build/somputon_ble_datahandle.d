@@ -43,3 +43,7 @@
 .\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\libraries\util\app_error.h
 .\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\libraries\util\sdk_errors.h
 .\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\libraries\util\app_error_weak.h
+.\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\drivers_nrf\hal\nrf_gpio.h
+.\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\drivers_nrf\hal\nrf_peripherals.h
+.\_build\somputon_ble_datahandle.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.15.0\Device\Include\nrf52832_peripherals.h
+.\_build\somputon_ble_datahandle.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

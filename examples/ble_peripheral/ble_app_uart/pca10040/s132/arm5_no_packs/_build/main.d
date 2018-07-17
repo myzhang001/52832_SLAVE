@@ -78,3 +78,9 @@
 .\_build\main.o: ..\arm5_no_packs\Protocol_Analysis.h
 .\_build\main.o: ..\arm5_no_packs\NUS_Master_DataHandle.h
 .\_build\main.o: ..\arm5_no_packs\System_Variable.h
+.\_build\main.o: ..\..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_svci.h
+.\_build\main.o: ..\..\..\..\..\..\components\libraries\svc\nrf_svci.h
+.\_build\main.o: ..\..\..\..\..\..\components\libraries\svc\nrf_svci_async_function.h
+.\_build\main.o: ..\..\..\..\..\..\components\libraries\svc\nrf_svci_async_handler.h
+.\_build\main.o: ..\..\..\..\..\..\components\libraries\svc\nrf_svc_function.h
+.\_build\main.o: ..\..\..\..\..\..\components\ble\ble_services\ble_dfu\ble_dfu.h

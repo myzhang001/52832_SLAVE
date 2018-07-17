@@ -22,7 +22,7 @@ void bond_cmd(void);
 void clear_history_data_cmd(void);
 void set_device_time_cmd(uint8_t *data_info);
 void get_device_time_cmd(uint32_t second);
-void control_device_cmd(uint8_t *ctrl_data);
+void control_device_cmd(uint8_t *ctrl_data,uint8_t length);
 void Clife_GetHisData(uint16_t cmd, uint8_t* data, uint16_t len);
 void Clife_GenerateHisData(void);
 void bond_cmd(void);

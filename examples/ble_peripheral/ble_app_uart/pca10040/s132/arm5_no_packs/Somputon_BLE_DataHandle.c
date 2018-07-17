@@ -4,7 +4,7 @@
 #include "NUS_Master_DataHandle.h"
 #include "ble_nus.h"
 
-
+#include "nrf_gpio.h"
 
 
 
@@ -132,9 +132,22 @@ void get_device_time_cmd(uint32_t second)
  *
  * @return      void
  */
-void control_device_cmd(uint8_t *ctrl_data)
+void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
 {
-
+    if( ctrl_data[10] == 0x20)
+    {
+        if(ctrl_data[5] == 0x01)
+        {
+            nrf_gpio_pin_clear(18);
+            printf("\r\non");
+        }
+        else if( ctrl_data[5] == 0x00)
+        {
+            nrf_gpio_pin_set(18);
+            
+            printf("\r\noff");
+        }
+    }
 
 
 

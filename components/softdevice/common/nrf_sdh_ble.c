@@ -214,27 +214,33 @@ static uint32_t ram_end_address_get(void)
     return RAM_START + ram_total_size;
 }
 
-
+    uint32_t data;
 ret_code_t nrf_sdh_ble_enable(uint32_t * const p_app_ram_start)
 {
     // Start of RAM, obtained from linker symbol.
     uint32_t const app_ram_start_link = *p_app_ram_start;
 
-    NRF_LOG_DEBUG("RAM starts at 0x%x", app_ram_start_link);
+
+    
+    printf("RAM starts at 0x%x", app_ram_start_link);
 
     ret_code_t ret_code = sd_ble_enable(p_app_ram_start);
     if (*p_app_ram_start != app_ram_start_link)
     {
-        NRF_LOG_WARNING("RAM starts at 0x%x, can be adjusted to 0x%x.",
+        printf("RAM starts at 0x%x, can be adjusted to 0x%x.",
                         app_ram_start_link, *p_app_ram_start);
 
-        NRF_LOG_WARNING("RAM size can be adjusted to 0x%x.",
+        data = *p_app_ram_start;
+        
+        printf("RAM size can be adjusted to 0x%x.",
                         ram_end_address_get() - (*p_app_ram_start));
+        
+        data = ram_end_address_get() - (*p_app_ram_start);
     }
 
     if (ret_code != NRF_SUCCESS)
     {
-        NRF_LOG_ERROR("sd_ble_enable() returned %s.", nrf_strerror_get(ret_code));
+        printf("sd_ble_enable() returned %s.", nrf_strerror_get(ret_code));
     }
 
     return ret_code;

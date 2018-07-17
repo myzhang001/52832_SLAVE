@@ -45,7 +45,7 @@ void App_RecvHandler(uint16_t command, uint8_t* pdata,uint16_t len)
 		switch(command)
 		{			
 			case ENCRYPTION_REQ_REPLY:
-					control_device_cmd(NULL);			      												
+					//control_device_cmd(NULL);			      												
 					break;
 			case CLEAR_HISTORY_DATA_COMMAND:
 					 clear_history_data_cmd();                //清除历史数据
@@ -71,20 +71,27 @@ void App_RecvHandler(uint16_t command, uint8_t* pdata,uint16_t len)
 					 break;
 			
 			case SET_DEVICE_TIME_COMMAND:			
-					 //set_device_time_cmd(data);				//  先同步APP的时间					 
+					 //set_device_time_cmd(data);				//先同步APP的时间					 
 					 break;		
 			
 			case GET_DEVICE_TIME_COMMAND:						 
-					  get_device_time_cmd(1);			    //  上传时间
+					  get_device_time_cmd(1);			       //上传时间
 					 break;
 			
 
 			case CONTROL_DATA_COMMAND:
-					 //control_device_cmd(data);				//处理控制数据	 
+					control_device_cmd(pdata,len);				//处理控制数据	 
                     printf("ok");
             
-					break;			
-															
+                    for(uint8_t i = 0; i < len;i++)
+                    {
+                        printf("\r\ndata[%d]:0x%02x",i,pdata[i]);
+                    }
+                    
+            
+            
+                
+					break;												
 			default:				
 					break;
 		}		
