@@ -92,6 +92,11 @@
 #include "nrf_svci_async_handler.h"
 
 #include "ble_dfu.h"
+#include "nrf_gpio.h"
+
+
+#include "led_control.h"
+
 
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
 
@@ -680,11 +685,11 @@ void uart_event_handle(app_uart_evt_t * p_event)
             break;
 
         case APP_UART_COMMUNICATION_ERROR:
-            APP_ERROR_HANDLER(p_event->data.error_communication);
+            //APP_ERROR_HANDLER(p_event->data.error_communication);
             break;
 
         case APP_UART_FIFO_ERROR:
-            APP_ERROR_HANDLER(p_event->data.error_code);
+            //APP_ERROR_HANDLER(p_event->data.error_code);
             break;
 
         default:
@@ -930,11 +935,13 @@ int main(void)
     uart_init();
     log_init();
 
-    buttons_leds_init(&erase_bonds);
+    led_init();                                     //所有外设初始化
+    
+    //buttons_leds_init(&erase_bonds);
     
     ble_stack_init();
     
-    User_Get_Addr();                               //获取mac 地址
+    User_Get_Addr();                                //获取mac 地址
     
     gap_params_init();
     gatt_init();
@@ -951,13 +958,16 @@ int main(void)
     Somputon_Init(&App_RecvHandler);                //注册数据处理函数
     //timer_start();
     
-    bond_cmd();
+    //bond_cmd();
     
+
     // Enter main loop.
     for (;;)
     {
         UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
         power_manage();
+        
+        
     }
 }
 

@@ -24,6 +24,9 @@ typedef struct{
 
 _s_analsis_word  Common_Word;
 
+somputon_data_recv_t  data_recv;    //数据处理数据结构
+
+
 
 //crc8 校验
 unsigned char Crc8( unsigned char *Address, unsigned char Length )
@@ -52,6 +55,18 @@ unsigned char Crc8( unsigned char *Address, unsigned char Length )
 			}
 		}
 		return crc;
+}
+
+
+
+uint16_t turn_to_u16(uint8_t high, uint8_t low)
+{
+	uint16_t data_all = 0;
+	data_all = high;
+	data_all = data_all<<8;
+	data_all |= low&0x00FF;
+	
+	return data_all;
 }
 
 
@@ -121,6 +136,8 @@ void nus_data_handle(uint8_t *data, uint8_t length)
     #endif
 
     
+    
+    #if 0
     if(data_buffer[0] == START_FLAG  && length == 20)   //第一包起始
     {
         //step = E_ONLY_DATA;
@@ -247,12 +264,7 @@ void nus_data_handle(uint8_t *data, uint8_t length)
 		
 		if(receive_data_from_app != NULL)
 		{
-            receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length);
-            #if 0
-			receive_data_from_app((uint16_t)nus_c_conn_handle,Common_Word.Common_World,
-            &data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length - 11,
-            Common_Word.Device_Type,Common_Word.MacAddr_Device);
-            #endif
+            receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length -11);
             
 		}
         
@@ -261,61 +273,85 @@ void nus_data_handle(uint8_t *data, uint8_t length)
     {
         return ;
     }
-    
-    
-    
-    
-    #if 0
-	if(data_buffer[0]!= START_FLAG)	
-	{
-		return;
-	}
-	else
-	{
-		Common_Word.Data_Length  = data_buffer[DATA_LENGTH_INDIX_LOW];    //获取数据包长度
-		Common_Word.Data_Length = Common_Word.Data_Length>>8;
-		Common_Word.Data_Length |= data_buffer[DATA_LENGTH_INDIX_HIGH];
-		
-		
-		
-		//printf("DATA LENGHT : %d",(uint8_t)Common_Word.Data_Length);
-        
-		Common_Word.Common_World = data_buffer[DATA_COMMOND_WORD];	   //获取命令字
-		Common_Word.Common_World = Common_Word.Common_World >> 8;
-		Common_Word.Common_World |= data_buffer[DATA_COMMOND_WORD +1 ];        
-		
-		//printf("COMMAND WORLD:  0X%04x",Common_Word.Common_World);
-        
-		
-		
-		Common_Word.Device_Type = data_buffer[DATA_DEVICE_TYPE_INDEX];     //获取设备类型
-		
-	    //memcpy(&Common_Word.MacAddr_Device,&data[DATA_DEVICE_MAC_INDEX],6);  //拷贝mac 地址		 	  
-			
-		
-		
-		
-		if(data_buffer[Common_Word.Data_Length +2 ]!= Crc8(&data_buffer[1],Common_Word.Data_Length + 1))  //crc8校验
-		{
-			//#ifdef UART_MASTER_TEST 
-			printf(" data_buffer crc %d", data_buffer[Common_Word.Data_Length]);
-			
-			printf("CRC ERROR");
-			//#endif
-			return;
-		}
-		//处理数据内容
-		
-		if(receive_data_from_app != NULL)
-		{
-			receive_data_from_app(Common_Word.Common_World,&data_buffer[DATA_CONTENT_INDEX],Common_Word.Data_Length);
-		}
-	}
     #endif
     
     
-    
-    
+   #if 1
+        if((data_buffer[0]== 0x3a)&&(data_recv.receive_start_flag == false))
+		{
+            printf("Flag OK!\r\n");
+			memcpy(&data_recv.rece_data[data_recv.data_index],data_buffer,length);
+			data_recv.data_index += length;			
+			data_recv.total_len= turn_to_u16(data_recv.rece_data[1],data_recv.rece_data[2])+3;	
+            
+            printf("data_index %d  data_recv.total_len %d",data_recv.data_index,data_recv.total_len);
+            
+            
+			data_recv.receive_start_flag = true;			
+		}
+		else if((data_recv.rece_data[0] == 0x3a)&&(data_recv.receive_start_flag == true))
+		{
+			//printf("data_index %d  data_recv.total_len %d",data_recv.data_index,data_recv.total_len);
+			if(data_recv.data_index < data_recv.total_len)
+			{
+                printf("still recv\r\n");
+				memcpy(&data_recv.rece_data[data_recv.data_index],data_buffer,length);
+				data_recv.data_index += length; 
+			}
+
+		}
+		else
+		{
+//				printf("other data\r\n");
+				data_recv.data_index = 0;
+				data_recv.receive_start_flag = false;
+				data_recv.total_len = 0;
+				memset(data_recv.rece_data,0,sizeof(data_recv.rece_data));
+		}
+
+		if(data_recv.data_index >= data_recv.total_len)										//receive data end					
+		{				
+			//for(uint8_t i=0;i<data_recv.data_index;i++)
+			//printf("0x%02x ",data_recv.rece_data[i]);
+			//printf("\r\n");		
+			if( data_recv.rece_data[data_recv.data_index - 1] != Crc8( &data_recv.rece_data[1], data_recv.data_index - 2 ) )
+			{
+				printf("APP->BT: crc error\r\n");
+				memset(data_recv.rece_data,0,sizeof(data_recv.rece_data));
+				data_recv.receive_start_flag = false;
+				data_recv.total_len = 0;
+				data_recv.data_index = 0;				
+				return;
+			}
+            
+            printf("APP->BT: crc ok\r\n");
+            
+            Common_Word.Data_Length  = data_recv.rece_data[DATA_LENGTH_INDIX_LOW];    //获取数据包长度
+            Common_Word.Data_Length = Common_Word.Data_Length>>8;
+            Common_Word.Data_Length |= data_recv.rece_data[DATA_LENGTH_INDIX_HIGH];
+
+            printf("DATA LENGHT : %d",(uint8_t)Common_Word.Data_Length);
+
+            Common_Word.Common_World = data_recv.rece_data[DATA_COMMOND_WORD];	   //获取命令字
+            Common_Word.Common_World = Common_Word.Common_World >> 8;
+            Common_Word.Common_World |= data_recv.rece_data[DATA_COMMOND_WORD +1 ];        
+
+            printf("COMMAND WORLD:  0X%04x",Common_Word.Common_World);
+
+            Common_Word.Device_Type = data_recv.rece_data[DATA_DEVICE_TYPE_INDEX];     //获取设备类型
+            
+
+            if(receive_data_from_app != NULL)
+            {
+                receive_data_from_app(Common_Word.Common_World,&data_recv.rece_data[DATA_CONTENT_INDEX],Common_Word.Data_Length - 11); 
+            }
+			memset(data_recv.rece_data,0,sizeof(data_recv.rece_data));
+			data_recv.receive_start_flag = false;
+			data_recv.total_len = 0;
+			data_recv.data_index = 0;
+		}
+  
+    #endif 
 }
 
 

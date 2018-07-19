@@ -28,3 +28,6 @@
 .\_build\micro_ecc_lib_keys.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_types.h
 .\_build\micro_ecc_lib_keys.o: ..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_keys.h
 .\_build\micro_ecc_lib_keys.o: ..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_shared.h
+.\_build\micro_ecc_lib_keys.o: ..\..\..\..\..\external\micro-ecc\micro-ecc-master\uECC.h
+.\_build\micro_ecc_lib_keys.o: ..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_init.h
+.\_build\micro_ecc_lib_keys.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_init.h

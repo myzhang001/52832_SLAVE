@@ -47,3 +47,8 @@
 .\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\drivers_nrf\hal\nrf_peripherals.h
 .\_build\somputon_ble_datahandle.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.15.0\Device\Include\nrf52832_peripherals.h
 .\_build\somputon_ble_datahandle.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\_build\somputon_ble_datahandle.o: led_control.h
+.\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\softdevice\s132\headers\ble_hci.h
+.\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\ble\common\ble_advdata.h
+.\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\ble\ble_advertising\ble_advertising.h
+.\_build\somputon_ble_datahandle.o: ..\..\..\..\..\..\components\ble\common\ble_conn_params.h

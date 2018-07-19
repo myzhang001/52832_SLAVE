@@ -31,3 +31,7 @@
 .\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_keys.h
 .\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_keys.h
 .\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_shared.h
+.\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\external\micro-ecc\micro-ecc-master\uECC.h
+.\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\components\libraries\experimental_log\nrf_log.h
+.\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\components\libraries\experimental_section_vars\nrf_section.h
+.\_build\micro_ecc_lib_ecdsa.o: ..\..\..\..\..\components\libraries\experimental_log\src\nrf_log_internal.h

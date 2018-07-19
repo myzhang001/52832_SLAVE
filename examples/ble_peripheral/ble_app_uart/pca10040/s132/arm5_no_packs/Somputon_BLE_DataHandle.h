@@ -6,11 +6,17 @@
 #include <stdio.h>
 #include <string.h>
 #include "nordic_common.h"
-
-
 #include "Protocol_Analysis.h"
 
 
+
+typedef struct
+{
+	uint8_t   receive_start_flag;
+	uint8_t   data_index;
+	uint16_t  total_len;
+	uint8_t   rece_data[180];
+}somputon_data_recv_t;
 
 
 

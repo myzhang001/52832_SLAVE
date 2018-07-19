@@ -25,3 +25,4 @@
 .\_build\micro_ecc_lib_shared.o: ..\..\..\..\..\components\libraries\util\sdk_macros.h
 .\_build\micro_ecc_lib_shared.o: ..\..\..\..\..\components\libraries\crypto\backend\micro_ecc\micro_ecc_lib_shared.h
 .\_build\micro_ecc_lib_shared.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_types.h
+.\_build\micro_ecc_lib_shared.o: ..\..\..\..\..\external\micro-ecc\micro-ecc-master\uECC.h

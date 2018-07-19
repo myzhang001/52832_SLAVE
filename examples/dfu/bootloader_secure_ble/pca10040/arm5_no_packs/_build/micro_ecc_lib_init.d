@@ -27,3 +27,4 @@
 .\_build\micro_ecc_lib_init.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_init.h
 .\_build\micro_ecc_lib_init.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_types.h
 .\_build\micro_ecc_lib_init.o: ..\..\..\..\..\components\libraries\crypto\nrf_crypto_rng.h
+.\_build\micro_ecc_lib_init.o: ..\..\..\..\..\external\micro-ecc\micro-ecc-master\uECC.h

@@ -47,7 +47,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\_build\</OutputDirectory>
-          <OutputName>nrf52832_xxaa</OutputName>
+          <OutputName>smart_demo_app</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -312,7 +312,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x23000</StartAddress>
-                <Size>0x5d000</Size>
+                <Size>0x55000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -446,6 +446,11 @@
               <FileName>System_Variable.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\System_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>led_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\led_control.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3372,6 +3377,11 @@
               <FileName>System_Variable.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\System_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>led_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\led_control.c</FilePath>
             </File>
           </Files>
         </Group>

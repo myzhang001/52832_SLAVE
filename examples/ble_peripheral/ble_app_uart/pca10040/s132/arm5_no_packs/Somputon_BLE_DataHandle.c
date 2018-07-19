@@ -6,6 +6,7 @@
 
 #include "nrf_gpio.h"
 
+#include "led_control.h"
 
 
 uint8_t SendBuffer[256];
@@ -13,6 +14,8 @@ extern uint8_t mac_addr[6];
 
  
 extern void send_data_proc(uint8_t *aSendBuffer,uint16_t len);     //·¢ËÍº¯Êý
+
+
 
 
 
@@ -138,19 +141,129 @@ void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
     {
         if(ctrl_data[5] == 0x01)
         {
-            nrf_gpio_pin_clear(18);
-            printf("\r\non");
+           door_on();
         }
         else if( ctrl_data[5] == 0x00)
         {
-            nrf_gpio_pin_set(18);
-            
-            printf("\r\noff");
+            door_off();
         }
     }
+    if(ctrl_data[10] == 0x01)  //´óÌüµÆ
+    {
+        if(ctrl_data[0] == 0x01)
+        {
+           halllight_on();
+           
+        }
+        else if( ctrl_data[0] == 0x00)
+        {
+           hallight_off();
+        }
+    }
+    if(ctrl_data[10] == 0x02)
+    {
+         if(ctrl_data[1] == 0x01)
+        {
+           bedroomlight_on();
+           
+        }
+        else if( ctrl_data[1] == 0x00)
+        {
+           bedroomlight_off();
+        }
 
-
-
+    }
+     if(ctrl_data[10] == 0x04)
+    {
+        if(ctrl_data[2] == 0x01)
+        {
+           GardenLight_on();
+           
+        }
+        else if( ctrl_data[2] == 0x00)
+        {
+           GardenLight_off();
+        }
+    
+    }
+     if(ctrl_data[10] == 0x08)
+    {
+         if(ctrl_data[3] == 0x01)
+        {
+           curtain_on();
+           
+        }
+        else if( ctrl_data[3] == 0x00)
+        {
+           curtain_off();
+        }
+    
+    }
+    if(ctrl_data[10] == 0x10)
+    {
+         if(ctrl_data[4] == 0x01)
+        {
+           curtain_on();
+           
+        }
+        else if( ctrl_data[4] == 0x00)
+        {
+           curtain_off();
+        }
+    
+    }
+    else if(ctrl_data[10] == 0x40)
+    {
+        if(ctrl_data[6] == 0x01)
+        {
+            clothes_shores_on();
+        }
+        else if( ctrl_data[6] == 0x00)
+        {
+           
+            clothes_shores_off();
+        }
+    
+    }
+    
+    else if(ctrl_data[10] == 0x80)
+    {
+        if(ctrl_data[7] == 0x01)
+        {
+            clothes_shores_on();
+        }
+        else if( ctrl_data[7] == 0x00)
+        {
+           
+            clothes_shores_off();
+        }
+    
+    }
+   
+    else if(ctrl_data[11] == 0x01)
+    {
+        if(ctrl_data[8] == 0x01)
+        {
+           
+           
+        }
+        else if( ctrl_data[8] == 0x00)
+        {
+           
+        }
+    
+    }
+    else if(ctrl_data[11] == 0x02)
+    {
+        if(ctrl_data[9] == 0x01)
+        {
+           studyroom_on();
+        }
+        else if( ctrl_data[9] == 0x00)
+        {
+           studyroom_off();
+        }
+    }
 }
 
 
