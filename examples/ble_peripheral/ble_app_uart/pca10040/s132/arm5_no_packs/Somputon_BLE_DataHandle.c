@@ -142,10 +142,12 @@ void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
         if(ctrl_data[5] == 0x01)
         {
            door_on();
+           // nrf_gpio_pin_clear(18);
         }
         else if( ctrl_data[5] == 0x00)
         {
-            door_off();
+           door_off();
+           // nrf_gpio_pin_set(18);
         }
     }
     if(ctrl_data[10] == 0x01)  //大厅灯
@@ -188,14 +190,25 @@ void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
     }
      if(ctrl_data[10] == 0x08)
     {
-         if(ctrl_data[3] == 0x01)
+          if(ctrl_data[3] == 0x02)  //停
         {
-           curtain_on();
+           //curtain_on();
+            nrf_gpio_pin_clear(26);
+            nrf_gpio_pin_clear(27);
            
         }
-        else if( ctrl_data[3] == 0x00)
+         
+         if(ctrl_data[3] == 0x01) //开
         {
-           curtain_off();
+           //curtain_on();
+            nrf_gpio_pin_clear(26);
+            nrf_gpio_pin_set(27);
+        }
+        else if( ctrl_data[3] == 0x00)  //关
+        {
+           //curtain_off();
+            nrf_gpio_pin_set(26);
+            nrf_gpio_pin_clear(27);
         }
     
     }
@@ -203,12 +216,18 @@ void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
     {
          if(ctrl_data[4] == 0x01)
         {
-           curtain_on();
-           
+            #if 1
+            nrf_gpio_pin_set(14);  //开   车库门
+
+            nrf_gpio_pin_clear(15);
+            #endif 
         }
         else if( ctrl_data[4] == 0x00)
         {
-           curtain_off();
+            #if 1
+            nrf_gpio_pin_clear(14);  //关 车库门
+            nrf_gpio_pin_set(15);
+            #endif
         }
     
     }
@@ -230,12 +249,12 @@ void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
     {
         if(ctrl_data[7] == 0x01)
         {
-            clothes_shores_on();
+            hourseholdlight_on();
         }
         else if( ctrl_data[7] == 0x00)
         {
            
-            clothes_shores_off();
+            hourseholdlight_off();
         }
     
     }
@@ -244,12 +263,20 @@ void control_device_cmd(uint8_t *ctrl_data,uint8_t length)
     {
         if(ctrl_data[8] == 0x01)
         {
-           
+            #if 1
+            nrf_gpio_pin_clear(16);  //开 筒灯
+            nrf_gpio_pin_set(17);
+
+            #endif
            
         }
         else if( ctrl_data[8] == 0x00)
         {
            
+            #if 1
+            nrf_gpio_pin_set(16);      //关  筒灯
+            nrf_gpio_pin_clear(17);
+            #endif
         }
     
     }

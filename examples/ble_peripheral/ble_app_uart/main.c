@@ -94,8 +94,9 @@
 #include "ble_dfu.h"
 #include "nrf_gpio.h"
 
-
 #include "led_control.h"
+#include "nrf_ecb.h"
+
 
 
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
@@ -121,7 +122,7 @@
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 #define UART_TX_BUF_SIZE                256                                         /**< UART TX buffer size. */
-#define UART_RX_BUF_SIZE                256                                         /**< UART RX buffer size. */
+#define UART_RX_BUF_SIZE                1024                                         /**< UART RX buffer size. */
 
 
 BLE_NUS_DEF(m_nus);                                                                 /**< BLE NUS service instance. */
@@ -143,7 +144,7 @@ extern uint8_t bond_ack;
 
 APP_TIMER_DEF(m_sys_timer_id);                           //系统定时
 
-#define SYS_MEAS_INTERVAL                     APP_TIMER_TICKS(1000)  
+#define SYS_MEAS_INTERVAL                     APP_TIMER_TICKS(1)  
 
 uint8_t conn_flag = 0;       //连接标志
 
@@ -224,17 +225,18 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 
         //memcpy(&buffer[0],p_evt->params.rx_data.p_data,p_evt->params.rx_data.length);
         
+        printf("\r\n len :%d",p_evt->params.rx_data.length);
         #if 1
         for(i = 0; i < p_evt->params.rx_data.length;i++)
         {
+            
             buffer[i] = p_evt->params.rx_data.p_data[i];
-            //printf("data[%d] 0x%02x\r\n",i,buffer[i]);
+            //printf("\r\[%d] 0x%02x",i,buffer[i]);
         }
         #endif
        
         nus_data_handle(buffer,p_evt->params.rx_data.length);
          
-
         #if 0
         for (uint32_t i = 0; i < p_evt->params.rx_data.length; i++)
         {
@@ -879,17 +881,89 @@ static void sys_meas_timeout_handler(void * p_context)
         }
         
         
-        
             break;
         case 2:
             break;
         case 3:
             break;
-        
-  
     }   
 }
 
+
+uint16_t key_holdon_ms,keyupCnt;
+uint8_t short_key_flag,key_long_down,key_fall_flag,doubleClick,keyUpFlag,long_key_flag;
+
+
+uint8_t long_down_flag = 0;
+
+
+uint8_t flag_start = 0;
+
+static void sys_meas_timeout(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+    
+    if(nrf_gpio_pin_read(13) == 0 )
+    {         
+        if(key_holdon_ms <= 3000)  
+        {
+            key_holdon_ms++; 
+            
+             nrf_gpio_pin_clear(18);
+        } 
+        else 
+        { 
+            key_holdon_ms = 0; 
+            short_key_flag=0;
+            key_long_down = 1;
+            key_fall_flag = 0;
+            
+            
+            long_down_flag = 1;
+            
+           // printf("long key");
+        } 
+    } 
+    else 
+    { 
+        if(key_holdon_ms>50)
+        {  
+            key_holdon_ms=0;
+            short_key_flag=1;
+            key_long_down =0;
+            key_fall_flag=0;
+            
+            if(keyupCnt>100 && keyupCnt<500)
+            { 
+                doubleClick = true;
+                short_key_flag=0;
+                //printf("double key");
+            } 
+            keyUpFlag = true; 
+        } 
+        else  
+        {    
+            nrf_gpio_pin_set(18);
+            key_holdon_ms=0; 
+            short_key_flag=0;
+            long_key_flag=0;
+            key_fall_flag=0;
+        } 
+        
+        flag_start = 0;
+        long_down_flag = 0;
+    }
+    
+    if(keyUpFlag)
+         keyupCnt++;
+    if(keyupCnt>500)
+      { 
+          keyupCnt = 0;
+          keyUpFlag = false;
+      }
+    
+
+}
 
 void timer_init(void)
 {
@@ -898,14 +972,13 @@ void timer_init(void)
     // Create timers.
     err_code = app_timer_create(&m_sys_timer_id,
                                 APP_TIMER_MODE_REPEATED,
-                                sys_meas_timeout_handler);
+                                sys_meas_timeout);
     APP_ERROR_CHECK(err_code);
 }
 
 
 void timer_start(void)
 {
-
     ret_code_t err_code;
 
     // Start application timers.
@@ -913,6 +986,12 @@ void timer_start(void)
     APP_ERROR_CHECK(err_code);
 }
 
+
+
+uint8_t ency_key[16]={0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f};
+
+uint8_t src_buff[16]={0x10};
+uint8_t dst_buff[16]={0x00};
 
 
 
@@ -935,7 +1014,25 @@ int main(void)
     uart_init();
     log_init();
 
-    led_init();                                     //所有外设初始化
+    //nrf_ecb_init();                                 //aes 加密模块初始化
+    
+    nrf_gpio_cfg_output(23);
+    
+    led_init();   //所有外设初始化
+    
+    nrf_gpio_cfg_output(14);
+    
+    nrf_gpio_cfg_output(15);
+    
+    nrf_gpio_cfg_output(16);
+    
+    nrf_gpio_cfg_output(17);
+    
+    nrf_gpio_cfg_output(27);
+    
+    nrf_gpio_cfg_input(13,NRF_GPIO_PIN_PULLUP);
+    
+    sd_ble_gap_tx_power_set(4);
     
     //buttons_leds_init(&erase_bonds);
     
@@ -960,17 +1057,63 @@ int main(void)
     
     //bond_cmd();
     
+    nrf_gpio_pin_clear(17);
+    nrf_gpio_pin_clear(18);   
+    nrf_gpio_pin_clear(19);
+    nrf_gpio_pin_clear(20);
+    //nrf_gpio_pin_set(23);
+    
+    nrf_gpio_pin_clear(14);  //关 车库门
+    nrf_gpio_pin_set(15);
+    
+    
+    //nrf_ecb_set_key(ency_key);
 
+    #if 0
+    nrf_gpio_pin_set(26);  //关
+    nrf_gpio_pin_set(27);  
+    #endif
+
+    #if 0
+    nrf_gpio_pin_clear(26);  //开   
+    nrf_gpio_pin_set(27);
+    #endif
+    
+    //nrf_ecb_crypt(&src_buff[0],&dst_buff[0]);
+
+    __NOP();
     // Enter main loop.
     for (;;)
     {
         UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
         power_manage();
+         
+
+        #if 0
+        if(long_down_flag == 1)
+        {
+             if(flag_start  == 0)
+             {
+                printf("key long down");
+                flag_start = 1;
+             }
+        }
         
+        if(key_long_down == 1)
+        {
+            key_long_down = 0;
+            printf("key long down");
+        }
+       
+        if(doubleClick == 1)
+        {
+            doubleClick = 0;
+            printf("key double");
+        }
+        #endif
         
     }
 }
-
 
 
 

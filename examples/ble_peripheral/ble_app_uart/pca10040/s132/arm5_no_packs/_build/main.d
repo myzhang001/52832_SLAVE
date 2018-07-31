@@ -85,3 +85,4 @@
 .\_build\main.o: ..\..\..\..\..\..\components\libraries\svc\nrf_svc_function.h
 .\_build\main.o: ..\..\..\..\..\..\components\ble\ble_services\ble_dfu\ble_dfu.h
 .\_build\main.o: ..\arm5_no_packs\led_control.h
+.\_build\main.o: ..\..\..\..\..\..\components\drivers_nrf\hal\nrf_ecb.h

@@ -5,6 +5,7 @@
 ".\_build\nus_maser_datahanle.o"
 ".\_build\system_variable.o"
 ".\_build\led_control.o"
+".\_build\nrf_ecb.o"
 ".\_build\boards.o"
 ".\_build\bsp.o"
 ".\_build\bsp_btn_ble.o"
